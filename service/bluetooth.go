@@ -279,68 +279,7 @@ func (bt *BtService) GetControllerInformation() (ctlInfo *pb.BluetoothController
 //   for a short duration
 
 // ToDo: Move all controller specific tasks to controller
-func (bt *BtService) StartNAP() (err error) {
-
-	if !bt.IsServiceAvailable() {
-		return bluetooth.ErrBtSvcNotAvailable
-	}
-	log.Println("Bluetooth: starting NAP...")
-	// assure bnep module is loaded
-	if err = CheckBnep(); err != nil {
-		return err
-	}
-
-	// Create a bridge interface
-	if errBr := bt.EnableBridge(); errBr != nil {
-		log.Println("Bridge exists already")
-	}
-
-	// Register custom agent bt-agent with "No Input, No Output" capabilities
-	// Note: This results in "just works" mode with no MitM protection (see notes above)
-	if err = bt.Agent.Start(toolz.AGENT_CAP_NO_INPUT_NO_OUTPUT); err != nil {
-		return err
-	}
-
-	// SSP and HS enabled, this disables PIN requests but is needed for NAP to work (see comments above)
-	bt.Controller.SetPowered(false)
-//	bt.Controller.SetSSP(true) //Couldn't use legacy mode (no Secure Simple Pairing, but PIN based pairing), otherwise HighSpeed couldn't be enabled
-//	bt.Controller.SetHighSpeed(true) // Enable high speed mode, yeah (without high speed, NAP connections don't work as intended)
-	bt.Controller.SetSSP(false) // Fall back to PIN authentication (legacy mode)
-	bt.Controller.SetHighSpeed(false) // No high speed without SSP
-	bt.Controller.SetPowered(true)
-
-	// Configure adapter
-	fmt.Println("Reconfigure adapter to be discoverable and pairable")
-	err = bt.Controller.SetAlias("P4wnP1")
-	if err != nil {
-		return
-	}
-	err = bt.Controller.SetDiscoverableTimeout(0)
-	if err != nil {
-		return
-	}
-	err = bt.Controller.SetPairableTimeout(0)
-	if err != nil {
-		return
-	}
-	err = bt.Controller.SetDiscoverable(true)
-	if err != nil {
-		return
-	}
-	err = bt.Controller.SetPairable(true)
-
-	time.Sleep(time.Second) //give some time before registering NAP to SDP
-
-	// Enable PAN networking for bridge
-	bt.RegisterNetworkServer(toolz.UUID_NETWORK_SERVER_NAP)
-
-	if mi, err := bt.RootSvc.SubSysNetwork.GetManagedInterface(BT_ETHERNET_BRIDGE_NAME); err == nil {
-		mi.ReDeploy()
-	}
-
-	return
-}
-*/
+// StartNAP logic removed during cleanup as it was disabled/incomplete
 
 func (bt *BtService) SetPIN(pin string) (err error) {
 	if !bt.IsServiceAvailable() {
@@ -543,17 +482,7 @@ Example: https://github.com/muka/go-bluetooth
  */
 
 /*
-func (bt BtService) CheckExternalBinaries() error {
-	bins := []string{"modprobe", "lsmod", "bt-adapter", "bt-agent", "bt-device", "bt-network", "bluetoothd"}
-	for _, bin := range bins {
-		if !binaryAvailable(bin) {
-			return errors.New(bin + " seems to be missing, please install it")
-		}
-
-	}
-	return nil
-}
-*/
+// CheckExternalBinaries removed during cleanup
 
 // ToDo: Get rid of this as soon as an API function is found
 // btmgt tool is able to determine Bluez version, mgmt-api is only able to determine Management version (which should be 1.14)

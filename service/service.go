@@ -34,84 +34,7 @@ func RegisterDefaultTriggerActions(tam *TriggerActionManager) {
 	}
 	tam.AddTriggerAction(serviceUpRunScript)
 
-	/*
-	logServiceStart := &pb.TriggerAction{
-		IsActive: true,
-		Trigger: &pb.TriggerAction_ServiceStarted{
-			ServiceStarted: &pb.TriggerServiceStarted{},
-		},
-		Action: &pb.TriggerAction_Log{
-			Log: &pb.ActionLog{},
-		},
-	}
-	tam.AddTriggerAction(logServiceStart)
-
-	logDHCPLease := &pb.TriggerAction{
-		IsActive: true,
-		Trigger: &pb.TriggerAction_DhcpLeaseGranted{
-			DhcpLeaseGranted: &pb.TriggerDHCPLeaseGranted{},
-		},
-		Action: &pb.TriggerAction_Log{
-			Log: &pb.ActionLog{},
-		},
-	}
-	tam.AddTriggerAction(logDHCPLease)
-
-	logUSBGadgetConnected := &pb.TriggerAction{
-		IsActive: true,
-		Trigger: &pb.TriggerAction_UsbGadgetConnected{
-			UsbGadgetConnected: &pb.TriggerUSBGadgetConnected{},
-		},
-		Action: &pb.TriggerAction_Log{
-			Log: &pb.ActionLog{},
-		},
-	}
-	tam.AddTriggerAction(logUSBGadgetConnected)
-
-	logUSBGadgetDisconnected := &pb.TriggerAction{
-		IsActive: true,
-		Trigger: &pb.TriggerAction_UsbGadgetDisconnected{
-			UsbGadgetDisconnected: &pb.TriggerUSBGadgetDisconnected{},
-		},
-		Action: &pb.TriggerAction_Log{
-			Log: &pb.ActionLog{},
-		},
-	}
-	tam.AddTriggerAction(logUSBGadgetDisconnected)
-
-	logWifiAp := &pb.TriggerAction{
-		IsActive: true,
-		Trigger: &pb.TriggerAction_WifiAPStarted{
-			WifiAPStarted: &pb.TriggerWifiAPStarted{},
-		},
-		Action: &pb.TriggerAction_Log{
-			Log: &pb.ActionLog{},
-		},
-	}
-	tam.AddTriggerAction(logWifiAp)
-
-	logWifiSta := &pb.TriggerAction{
-		IsActive: true,
-		Trigger: &pb.TriggerAction_WifiConnectedAsSta{
-			WifiConnectedAsSta: &pb.TriggerWifiConnectedAsSta{},
-		},
-		Action: &pb.TriggerAction_Log{
-			Log: &pb.ActionLog{},
-		},
-	}
-	tam.AddTriggerAction(logWifiSta)
-
-	logSSHLogin := &pb.TriggerAction{
-		IsActive: true,
-		Trigger: &pb.TriggerAction_SshLogin{
-			SshLogin: &pb.TriggerSSHLogin{},
-		},
-		Action: &pb.TriggerAction_Log{
-			Log: &pb.ActionLog{},
-		},
-	}
-	tam.AddTriggerAction(logSSHLogin)
-	*/
+	// Default TriggerActions logging removed during cleanup
 }
 
 type Service struct {
@@ -154,7 +77,7 @@ func NewService() (svc *Service, err error) {
 		return nil, err
 	}
 	svc.SubSysUSB, err = NewUSBGadgetManager(svc) //Depends on NetworkSubSys, EvenSubSys
-	//	if err == ErrUsbNotUsable { err = nil } //ToDo: delete this
+
 	if err != nil {
 		return nil, err
 	}
